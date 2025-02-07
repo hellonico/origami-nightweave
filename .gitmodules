@@ -1,0 +1,24 @@
+[submodule "build-tools"]
+	path = build-tools
+	url = ./build-tools/
+[submodule "linen"]
+	path = linen
+	url = ./linen/
+[submodule "origami-pink"]
+	path = origami-pink
+	url = ./origami-pink/
+[submodule "pillow"]
+	path = pillow
+	url = ./pillow/
+[submodule "pyjama-cljs"]
+	path = pyjama-cljs
+	url = ./pyjama-cljs/
+[submodule "pyjama-io"]
+	path = pyjama-io
+	url = ./pyjama-io/
+[submodule "pyjama"]
+	path = pyjama
+	url = ./pyjama/
+[submodule "waves"]
+	path = waves
+	url = ./waves/
