@@ -94,3 +94,9 @@
 /pyjama-skywalker/skywalker21/predictions.csv
 /pyjama-io/pruns.csv
 /pyjama-io/pruns.xlsx
+/.idea/libraries/Deps__com_taoensso_encore_3_112_0.xml
+/.idea/libraries/Deps__com_taoensso_nippy_3_4_2.xml
+/.idea/libraries/Deps__com_taoensso_truss_1_11_0.xml
+/.idea/libraries/Deps__io_airlift_aircompressor_0_27.xml
+/.idea/libraries/Deps__org_clojure_tools_reader_1_4_2.xml
+/.idea/libraries/Deps__org_tukaani_xz_1_9.xml
