@@ -41,9 +41,10 @@
         ]
     (response/response json)))
 
-(defroutes app-routes
-           (POST "/api/chat" request (handle-chat request))
-           (route/not-found "Not Found"))
+(defroutes
+  app-routes
+  (POST "/api/chat" request (handle-chat request))
+  (route/not-found "Not Found"))
 
 (defn -main []
   (run-jetty app-routes {:port 3100 :join? false}))

@@ -1,14 +1,15 @@
 (ns htmls.v4
   (:require [cheshire.core :as json]
             [clojure.core.async :as async]
-            [clojure.java.io :as io]
             [org.httpkit.server :as http]
+            [pyjama.games.joining :as joining]
             [pyjama.games.philosophersv4 :as v4]
             [pyjama.utils]
-            [utils.core]
             [ring.middleware.file :refer [wrap-file]]
+            [ring.util.codec :as codec]
             [ring.util.response :refer [content-type response]]
-            [ring.util.response :refer [response]]))
+            [ring.util.response :refer [response]]
+            [utils.core]))
 
 (defonce ws-clients (atom #{}))
 
@@ -23,18 +24,11 @@
       (http/send! client json-msg))))
 
 (def app-state
-  (atom {:lag 5000
+  (atom {:lag      5000
          :battle-message
          "This is a conversation battle. Everyone should chat, with simple, very very short, witty answers.
                               May the most intelligent win. "
          :chatting false}))
-
-(defn load-people [people]
-  (let [personality-file (io/resource people )
-        personalities (v4/random-personalities personality-file)
-        people (v4/load-states personalities)
-        ]
-    (swap! app-state assoc :people people)))
 
 (defn thread-with-speakers [question]
   (async/thread
@@ -92,11 +86,48 @@
     (content-type "application/json")
     ))
 
+(defn handle-join [req]
+  (let [body (slurp (:body req))
+        json (json/parse-string body true)
+        _ (clojure.pprint/pprint json)
+        ok? (try
+              (swap! app-state update :people conj (joining/load-one-philosopher json))
+              true
+              (catch Exception e
+                (do
+                  (.printStackTrace e)
+                  )
+                false)
+              )
+        ]
+    (-> (json/generate-string ok?)
+        response
+        (content-type "application/json"))))
+
+(defn handle-leave [req]
+  (let [
+        params (codec/form-decode (:query-string req))
+        name (get params "name")
+        _ (println name)
+        people (:people @app-state)
+        ;_ (println people)
+        find? (some #(= (:name (deref %)) name) people)
+        _ (println find?)
+        ]
+    (if find?
+      (do
+        (swap! app-state update :people (fn [people] (remove #(= (:name (deref %)) name) people)))
+        {:status 200 :body "true"})
+      {:status 400 :body "false"})))
+
+
 (defn app []
   (-> (fn [req]
         (cond
           (= (:uri req) "/ws") (ws-handler req)
           (= (:uri req) "/state") (handle-state req)
+          (= (:uri req) "/join") (handle-join req)
+          (= (:uri req) "/leave") (handle-leave req)
           (= (:uri req) "/ask") {:status  200
                                  :headers {"Content-Type" "text/html"}
                                  :body    (slurp "public/v4/ask.html")}
@@ -118,5 +149,5 @@
 
 (defn -main []
   (println "Starting server on http://localhost:3001")
-  (load-people "personalitiesv5.csv")
+  (joining/load-people app-state "personalitiesv5.csv")
   (http/run-server (app) {:port 3001}))
