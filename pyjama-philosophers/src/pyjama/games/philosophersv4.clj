@@ -16,13 +16,14 @@
     (shuffle all-personalities)))
 
 (defn load-states [personalities]
-  (mapv (fn [[name system url model temperature]]
+  (mapv (fn [[name system url model temperature avatar]]
           (atom {:name     name
                  :url      (if (empty? url)
                              (or (System/getenv "OLLAMA_URL") "http://localhost:11434")
                              url)
                  :model    (or model "tinyllama")
-                 :options  {:temperature (or temperature 0.9)}
+                 :avatar   (or avatar (str "/images/" name ".png"))
+                 ;:options  {:temperature (or temperature 0.9)}
                  :system   system
                  :stream   false
                  :messages []}))
@@ -43,14 +44,19 @@
       (when (and (pos? remaining-turns) (:chatting @app-state))
         (let [available-indices (remove #(= % last-speaker-idx) (range (count states)))
               speaker-idx (nth available-indices (rand-int (count available-indices)))
-              speaker-atom (nth states speaker-idx)]
+              speaker-atom (nth states speaker-idx)
+              speaker (:name @speaker-atom)
+              ]
+
+          (println speaker " is talking...")
           (pyjama.state/handle-chat speaker-atom)
 
+          ; wait for input
           (while (:processing @speaker-atom)
             (Thread/sleep 500))
 
           (let [last-response (last (:messages @speaker-atom))
-                speaker (:name @speaker-atom)
+
                 formatted-response (assoc last-response
                                      :role :user
                                      :content (str (:name @speaker-atom) "> " (:content last-response)))]
@@ -60,9 +66,9 @@
 
             (if (:chatting @app-state)
               (do
-                (broadcast-fn {:image (str "/images/" speaker ".png") :name speaker :text (:content last-response)})
+                (broadcast-fn {:image (:avatar @speaker-atom) :name speaker :text (:content last-response)})
 
-                ;(Thread/sleep 2000)
+                (Thread/sleep ^long (:lag @app-state))
 
                 ; TODO: delete? but maybe if a new member joins in, we dont want them to read all the messages
                 (doseq [state states]

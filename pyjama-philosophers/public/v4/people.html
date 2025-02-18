@@ -4,15 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>People List</title>
+    <link rel="stylesheet" href="../white.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            /*font-family: Arial, sans-serif;*/
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             background-color: #f5f5f5;
         }
+
         .container {
             display: flex;
             flex-wrap: wrap;
@@ -20,6 +22,7 @@
             max-width: 1200px;
             justify-content: center;
         }
+
         .card {
             background: white;
             padding: 15px;
@@ -29,9 +32,11 @@
             max-width: 250px;
             transition: border 0.3s;
         }
+
         .card:hover {
             border: 2px solid #333;
         }
+
         .card img {
             width: 100px;
             height: 100px;
@@ -39,9 +44,11 @@
             border-radius: 50%;
             margin-bottom: 10px;
         }
+
         .card h3 {
             margin: 10px 0 5px;
         }
+
         .card p {
             font-size: 14px;
             color: #555;
@@ -63,14 +70,17 @@
                 card.className = 'card';
 
                 const img = document.createElement('img');
-                img.src = `/images/${person.name.toLowerCase()}.png`;
+                //img.src = `/images/${person.name.toLowerCase()}.png`;
+                img.src = `${person.avatar}`;
                 img.alt = person.name;
 
                 const name = document.createElement('h3');
                 name.textContent = person.name;
 
                 const model = document.createElement('p');
-                model.textContent = `Model: ${person.model}`;
+                if (person.model !== "") {
+                    model.textContent = `Model: ${person.model}`;
+                }
 
                 const system = document.createElement('p');
                 system.textContent = person.system;

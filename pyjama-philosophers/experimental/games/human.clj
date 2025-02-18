@@ -15,16 +15,14 @@
   (let [body (slurp (:body request))
         data (json/parse-string body true)
         messages (:messages data)
-        _ (println "Last message: " (last messages))
+        _ (println "Last messages: " (last messages))
         response-text (get-user-input)
         response-map {:model "human"
                       :created_at (str (Instant/now))
-                      :message {:role    "user" :content response-text}
-                      :done true}
-        json (json/generate-string response-map)
-        ]
-    ;(println json)
-    (response/response json)))
+                      :message {:role    "user"
+                                :content response-text}
+                      :done true}]
+    (response/response (json/generate-string response-map))))
 
 (defroutes app-routes
            (POST "/api/chat" request (handle-chat request))
