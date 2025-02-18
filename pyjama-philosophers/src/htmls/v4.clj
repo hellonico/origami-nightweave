@@ -112,6 +112,9 @@
           (= (:uri req) "/human") {:status  200
                                    :headers {"Content-Type" "text/html"}
                                    :body    (slurp "public/v4/human.html")}
+          (= (:uri req) "/people") {:status  200
+                                   :headers {"Content-Type" "text/html"}
+                                   :body    (slurp "public/v4/people.html")}
           (= (:uri req) "/summary") (handle-summary req)
           (= (:uri req) "/questions") (handle-questions req)
           (= (:uri req) "/question") (handle-question req)  ; New route to handle the POST request

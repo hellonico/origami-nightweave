@@ -64,9 +64,12 @@
 
                 ;(Thread/sleep 2000)
 
+                ; TODO: delete? but maybe if a new member joins in, we dont want them to read all the messages
                 (doseq [state states]
                   (when (not= state speaker-atom)
-                    (swap! state update :messages conj formatted-response)))))
+                    (swap! state update :messages conj formatted-response)))
+
+                ))
 
             (recur (dec remaining-turns) speaker-idx)))))
 
