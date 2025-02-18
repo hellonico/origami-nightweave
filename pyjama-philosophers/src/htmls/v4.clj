@@ -4,6 +4,7 @@
             [clojure.java.io :as io]
             [org.httpkit.server :as http]
             [pyjama.games.philosophersv4 :as v4]
+            [pyjama.utils]
             [ring.middleware.file :refer [wrap-file]]
             [ring.util.response :refer [content-type response]]
             [ring.util.response :refer [response]])
@@ -79,7 +80,7 @@
          :options  {:temperature 0.9}
          :stream   false
          :messages (reverse (conj (:messages @app-state)
-                         {:role :user :content question}))}
+                                  {:role :user :content question}))}
         ]
     (->
       (pyjama.core/ollama (:url summary) :chat (dissoc summary :url) identity)
@@ -88,6 +89,17 @@
       (content-type "application/json"))
     )
   )
+
+(defn handle-questions [req]
+  (->
+    "questions.log"
+    pyjama.utils/load-lines-of-file
+    set
+    reverse
+    json/generate-string
+    response
+    (content-type "application/json")
+  ))
 
 (defn app []
   (-> (fn [req]
@@ -101,7 +113,7 @@
                                    :headers {"Content-Type" "text/html"}
                                    :body    (slurp "public/v4/human.html")}
           (= (:uri req) "/summary") (handle-summary req)
-          (= (:uri req) "/questions") (slurp "questions.log")
+          (= (:uri req) "/questions") (handle-questions req)
           (= (:uri req) "/question") (handle-question req)  ; New route to handle the POST request
           :else (do
                   (swap! app-state assoc :chatting false)

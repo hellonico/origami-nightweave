@@ -70,6 +70,7 @@
 <div id="output" style="wrap-option: te">
     <input id="question" text="Start conversation"/>
     <button id="start">Start Battle</button>
+    <div id="previous"></div>
 </div>
 <script>
     document.getElementById('start').addEventListener('click', function () {
@@ -146,6 +147,34 @@
 
         messageCount++;  // Increment message count
     };
+
+    async function fetchQuestions() {
+        try {
+            const response = await fetch("http://localhost:3001/questions");
+            const data = await response.json();
+
+            const previousDiv = document.getElementById("previous");
+            previousDiv.innerHTML = ""; // Clear previous content
+
+            const ul = document.createElement("ul");
+
+            data.forEach((item) => {
+                const li = document.createElement("li");
+                li.textContent = item;
+                li.style.cursor = "pointer"; // Indicate it's clickable
+                li.addEventListener("click", () => {
+                    document.getElementById("question").value = item;
+                });
+                ul.appendChild(li);
+            });
+
+            previousDiv.appendChild(ul);
+        } catch (error) {
+            console.error("Error fetching questions:", error);
+        }
+    }
+
+    fetchQuestions();
 
 
 </script>
