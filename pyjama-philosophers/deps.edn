@@ -8,6 +8,9 @@
  {
   :v3 {:main-opts ["-m" "htmls.v3"]}
   :v4 {:main-opts ["-m" "htmls.v4"]}
+
+  :human {:main-opts ["-m" "pyjama.games.handlers.core" "--handler" "pyjama.games.handlers.human/handler"]}
+  :piporag {:main-opts ["-m" "pyjama.games.handlers.core" "--handler" "pyjama.games.handlers.piporag/handler" "--port" "4001"]}
   }
 
  :deps
