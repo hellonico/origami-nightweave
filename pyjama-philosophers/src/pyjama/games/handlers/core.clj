@@ -7,7 +7,7 @@
             [compojure.route :as route]
             [ring.adapter.jetty :refer [run-jetty]]
             [ring.util.response :as response])
-  (:import (java.net InetAddress)
+  (:import (java.net InetAddress NetworkInterface)
            (java.time Instant)))
 
 (def cli-options
@@ -38,8 +38,12 @@
              (route/not-found "Not Found"))
   app-routes)
 
+
+(defn get-local-ip []
+  (-> (InetAddress/getLocalHost) .getHostAddress))
+
 (defn get-non-local-ip []
-  (->> (java.net.NetworkInterface/getNetworkInterfaces)
+  (->> (NetworkInterface/getNetworkInterfaces)
        (enumeration-seq)
        (mapcat #(enumeration-seq (.getInetAddresses %)))
        (filter #(and (not (.isLoopbackAddress %))
@@ -49,7 +53,7 @@
 
 (defn register-handler [server-url name local-ip port avatar]
   (let [endpoint (str "http://" local-ip ":" port)
-        payload {:name name :endpoint endpoint :avatar avatar}]
+        payload {:name name :url endpoint :avatar avatar}]
     (println "Registering handler to" server-url "with data:" payload)
     (http/post (str server-url "/join")
                {:body (json/generate-string payload)
@@ -65,8 +69,10 @@
     (if (nil? handler-name)
       (do (println "Error: --name parameter is required")
           (System/exit 1))
-      (let [server (run-jetty (create-app handle-messages) {:port port :join? false})
+      (let [server (run-jetty (create-app handle-messages) {:host "0.0.0.0" :port port :join? false})
             assigned-port (-> server .getConnectors first (#(.getLocalPort %)))
-            local-ip (get-non-local-ip)]
+            ; local-ip (get-non-local-ip)
+            local-ip (get-local-ip)
+            ]
         (when (:server-url options)
           (register-handler (:server-url options) handler-name local-ip assigned-port (:avatar options)))))))

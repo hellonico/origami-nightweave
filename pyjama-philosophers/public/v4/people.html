@@ -47,6 +47,10 @@
             font-size: 14px;
             color: #555;
         }
+        .card.dead {
+            opacity: 0.5;
+            filter: grayscale(100%);
+        }
         .remove-button {
             position: absolute;
             top: 5px;
@@ -114,6 +118,9 @@
             data.people.forEach(person => {
                 const card = document.createElement('div');
                 card.className = 'card';
+                if (!person.alive) {
+                    card.classList.add('dead');
+                }
 
                 const img = document.createElement('img');
                 // img.src = `/images/${person.name.toLowerCase()}.png`;

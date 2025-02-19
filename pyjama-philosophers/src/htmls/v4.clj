@@ -52,7 +52,11 @@
     (response (json/generate-string {:answer question}))))
 
 (defn handle-state [req]
-  (-> (response (json/generate-string (utils.core/deep-deref app-state)))
+  (utils.core/mark-alive app-state)
+  (-> app-state
+      utils.core/deep-deref
+      json/generate-string
+      response
       (content-type "application/json")))
 
 (defn handle-summary [req]
