@@ -100,3 +100,7 @@
 /.idea/libraries/Deps__io_airlift_aircompressor_0_27.xml
 /.idea/libraries/Deps__org_clojure_tools_reader_1_4_2.xml
 /.idea/libraries/Deps__org_tukaani_xz_1_9.xml
+/pyjama-philosophers/whisper.cpp/
+/pyjama-philosophers/experimental/
+/pyjama-philosophers/classes/
+/pyjama-philosophers/.cpcache/
