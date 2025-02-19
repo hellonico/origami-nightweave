@@ -38,9 +38,9 @@
              (route/not-found "Not Found"))
   app-routes)
 
-
-(defn get-local-ip []
-  (-> (InetAddress/getLocalHost) .getHostAddress))
+;
+;(defn get-local-ip []
+;  (-> (InetAddress/getLocalHost) .getHostAddress))
 
 (defn get-non-local-ip []
   (->> (NetworkInterface/getNetworkInterfaces)
@@ -50,6 +50,7 @@
                      (.isSiteLocalAddress %)))  ;; Filters non-local IPs
        (map str)
        first)) ;; Gets the first non-local IP
+(def get-local-ip get-non-local-ip)
 
 (defn register-handler [server-url name local-ip port avatar]
   (let [endpoint (str "http://" local-ip ":" port)

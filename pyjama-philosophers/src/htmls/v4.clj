@@ -93,7 +93,8 @@
 (defn handle-join [req]
   (let [body (slurp (:body req))
         json (json/parse-string body true)
-        _ (clojure.pprint/pprint json)
+        ;_ (clojure.pprint/pprint json)
+        new-atom (joining/load-one-philosopher json)
         ok? (try
               (swap! app-state update :people conj (joining/load-one-philosopher json))
               true
@@ -103,8 +104,15 @@
                   )
                 false)
               )
+        _ (if ok?
+            (do (println (:name json) " has joined.")
+                (v4/tell-everybody-else (:people @app-state) new-atom {:role :user :content (str (:name " has joined"))}))
+            (println (:name json) " failed to joined."))
+        http-res {:status  200
+                  :headers {"Content-Type" "text/plain"}
+                  :body    ok?}
         ]
-    (-> (json/generate-string ok?)
+    (-> (json/generate-string http-res)
         response
         (content-type "application/json"))))
 
@@ -154,4 +162,4 @@
 (defn -main []
   (println "Starting server on http://localhost:3001")
   (joining/load-people app-state "personalitiesv5.csv")
-  (http/run-server (app) {:port 3001}))
+  (http/run-server (app) {:host "0.0.0.0" :port 3001}))
