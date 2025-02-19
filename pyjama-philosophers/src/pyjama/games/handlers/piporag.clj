@@ -5,7 +5,7 @@
 (def knowledge
   (pyjama.io.readers/extract-text "knowledge/Yuval.epub"))
 
-(def url
+(def ollama-url
   "http://localhost:11434")
 
 (defn handler [data]
@@ -18,7 +18,7 @@
         model (or (:model data) "llama3.1")
         response-text
         (pyjama.core/ollama
-          url
+          ollama-url
           :generate
           {:model  model
            :prompt [knowledge first-message last-message]
