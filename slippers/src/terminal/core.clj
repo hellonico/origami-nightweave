@@ -12,7 +12,7 @@
      :url    "http://localhost:11434"
      :input  ""
      :history []
-     :show-history? false
+     :show-history? true
      :output ""}))
 
 ;; Get system information
@@ -56,46 +56,57 @@
       (str "Error: " (:err result)))))
 
 (defn root-view [{:keys [input output history show-history?]}]
-    {:fx/type          :stage
-     :showing          true
-     :on-close-request (fn [_] (System/exit 0))
-     :title            "Terminal App"
-     :scene            {:fx/type     :scene
-                        :stylesheets #{(.toExternalForm (io/resource "terminal.css"))}
-                        :root        {:fx/type  :v-box
-                                      :children (concat
-                                                  [{:fx/type   :text-area
-                                                    :editable  false
-                                                    :text      output
-                                                    :wrap-text true}
-                                                   {:fx/type         :text-area
-                                                    :prompt-text     "Enter your command here"
-                                                    :text            input
-                                                    :on-text-changed (fn [event]
-                                                                       (swap! state assoc :input event))}
-                                                   {:fx/type   :button
-                                                    :text      "Execute"
-                                                    :on-action (fn [_]
-                                                                 (let [command (model-call input)
-                                                                       result (execute-command command)]
-                                                                   (swap! state update :history conj input)
-                                                                   (swap! state assoc :output result)))}]
-                                                  (when show-history?
-                                                    [{:fx/type  :v-box
-                                                      :children (map-indexed
-                                                                  (fn [idx cmd]
-                                                                    {:fx/type  :h-box
-                                                                     :children [{:fx/type :label
-                                                                                 :text    (str (inc idx) ". " cmd)}
-                                                                                {:fx/type   :button
-                                                                                 :text      "Re-run"
-                                                                                 :on-action (fn [_]
-                                                                                              (swap! state assoc :input cmd))}]})
-                                                                  history)}])
-                                                  [{:fx/type   :button
-                                                    :text      (if show-history? "Hide History" "Show History")
-                                                    :on-action (fn [_]
-                                                                 (swap! state update :show-history? not))}])}}})
+  {:fx/type          :stage
+   :showing          true
+   :on-close-request (fn [_] (System/exit 0))
+   :title            "Terminal App"
+   :scene            {:fx/type     :scene
+                      :stylesheets #{(.toExternalForm (io/resource "terminal.css"))}
+                      :root        {:fx/type  :h-box  ;; Use h-box for left and right sections
+                                    :children [{:fx/type  :v-box
+                                                :h-box/hgrow   :always
+                                                :children [{:fx/type   :text-area
+                                                            :editable  false
+                                                            :text      output
+                                                            :wrap-text true
+                                                            :v-box/vgrow     :always} ;; Allows resizing
+                                                           {:fx/type         :text-area
+                                                            :prompt-text     "Enter your command here"
+                                                            :text            input
+                                                            :on-text-changed (fn [event]
+                                                                               (swap! state assoc :input event))
+                                                            :v-box/vgrow          :always}
+                                                           {:fx/type   :button
+                                                            :text      "Execute"
+                                                            :on-action (fn [_]
+                                                                         (let [command (model-call input)
+                                                                               result (execute-command command)]
+                                                                           (swap! state update :history conj input)
+                                                                           (swap! state assoc :output result)))}
+                                                           {:fx/type   :button
+                                                            :text      (if show-history? "Hide History" "Show History")
+                                                            :on-action (fn [_]
+                                                                         (swap! state update :show-history? not))}]}
+                                               (if (not show-history?)
+                                                 {:fx/type  :v-box
+                                                  :pref-width 0
+                                                  }
+                                                 {:fx/type  :v-box
+                                                  :pref-width 300
+                                                  :children [{:fx/type :label
+                                                              :text "Command History"}
+                                                             {:fx/type  :v-box
+                                                                        :children (map-indexed
+                                                                                    (fn [idx cmd]
+                                                                                      {:fx/type  :h-box
+                                                                                       :children [{:fx/type :label
+                                                                                                   :text    (str (inc idx) ". " cmd)}
+                                                                                                  {:fx/type   :button
+                                                                                                   :text      "Re-run"
+                                                                                                   :on-action (fn [_]
+                                                                                                                (swap! state assoc :input cmd))}]})
+                                                                                    history)}]})]}}})
+
 (def renderer
   (fx/create-renderer
     :middleware (fx/wrap-map-desc assoc :fx/type root-view)))
