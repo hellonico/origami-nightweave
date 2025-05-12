@@ -1,3 +1,6 @@
+.cpcache
+.nrepl-port
+*.iml
 /.secrets.txt
 /pyjama-agents/.cpcache
 /pyjama-io/pruns.csv

@@ -22,3 +22,6 @@
 [submodule "waves"]
 	path = waves
 	url = ./waves/
+[submodule "breeze"]
+	path = breeze
+	url = git@github.com:hellonico/breeze.git
