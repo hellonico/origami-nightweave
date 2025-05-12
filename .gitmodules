@@ -25,3 +25,6 @@
 [submodule "breeze"]
 	path = breeze
 	url = git@github.com:hellonico/breeze.git
+[submodule "philosophers"]
+	path = philosophers
+	url = git@github.com:hellonico/philosophers.git
