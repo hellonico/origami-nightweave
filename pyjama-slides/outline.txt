@@ -1,0 +1,36 @@
+# Visit to MKI
+
+# Fitnesse Installation
+- Machine OS (windows / linux)
+- Re-install each time, or once at each release?
+- Version used
+
+# Fitnesse Wiki
+- Frontend + Backend or just one wiki
+- how is the wiki organized ?
+- how is the wiki saved ?
+- how is the wiki versioned ?
+- how is the wiki deployed ?
+- Collated with Calypso or not
+
+# Before Fitnesse runs
+- Auto load Fixtures (data for tests)
+
+# Fitnesse Runs
+- how many tests (approximately)
+- Is the fitnesse test suite triggered
+  - manually
+  - via jenkins
+  - via gitlab
+  - via some input file/folder
+- Scheduled tasks triggers or something else ?
+- Some position/contract insertions via fitnesse or expecting all in the database
+- How many reports are generated after fitnesse ?
+- Are the generated reports used for testing validation or something else ?
+
+# After Fitnesse run
+- Unload the fixtures ?
+- Clean up the data generated during testing or not
+- What's the coverage report format ? (CSV/ Excel..)
+- What are the other reports format ? (CSV/ Excel..)
+- Do we have a green light / red light indicator ? (number of failed tests)

@@ -1,0 +1,16 @@
+# Write paper for FProPer 2025
+- FProPer aims to bring together researchers and practitioners that strive to use or develop declarative languages for combining programmer productivity with the highest levels of runtime performance.
+
+# The workshop solicits two kinds of submissions
+- Submissions for regular papers of up to 12 pages will be reviewed for publication by ACM as workshop proceedings.
+- Submissions for stand-alone abstracts of up to 2 pages will be reviewed for suitability of presentation at FProPer, but will not be published.
+
+# Paper Content: Local SLMs, LLMs AI
+- Targeted for finance
+- specific scenarios
+
+# Deadlines
+- Abstract for full papers deadline Saturday, May 31th.
+- Full Paper submission deadline Saturday, June 14th.
+- 2-page stand-alone abstract only deadline
+ Saturday, August 2rd.

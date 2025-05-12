@@ -1,0 +1,6 @@
+# Pyjama, the Clojure wrapper for Ollama.
+- this is a great library
+
+# Slide2: Going into details
+- point 1
+- point 2

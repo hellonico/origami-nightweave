@@ -1,0 +1,101 @@
+[ {
+  "title" : "Visit to MKI",
+  "visual_description" : "A photo of the exterior or interior of the MKI facility, conveying a sense of professionalism and sophistication.",
+  "notes" : "Presenter notes: Briefly discuss the purpose and highlights of our visit to MKI. Emphasize key takeaways and insights gained from this experience.",
+  "content" : [ {
+    "point" : "Date: [Insert Date] – Our team conducted an on-site visit to MKI, focusing on process improvements and exploring potential partnerships."
+  }, {
+    "point" : "Objectives: We aimed to enhance our understanding of their operations, identify areas for collaboration, and gather input for future initiatives."
+  }, {
+    "point" : "Key Takeaways: Our team collected valuable information on best practices in [specific area] and engaged with the MKI team to discuss potential synergies and opportunities for growth."
+  } ]
+}, {
+  "title" : "Fitnesse Installation",
+  "visual_description" : "A simple screenshot of the Fitnesse installation process on a computer screen with Windows or Linux operating system visible in the background.",
+  "notes" : "Note: The version used and installation frequency (re-install each time or once at each release) may vary depending on your project's requirements and environment. Be sure to consult the official documentation for more information.",
+  "content" : [ {
+    "point" : "Machine OS: Windows or Linux"
+  }, {
+    "point" : "Re-install each time: Yes/No (e.g., every time a new feature is added)"
+  }, {
+    "point" : "Once at each release: Yes/No (e.g., only when a major version update is deployed)"
+  }, {
+    "point" : "Version used (e.g., FitNesse 1.6.9, latest stable release)"
+  } ]
+}, {
+  "title" : "Fitnesse Wiki",
+  "visual_description" : "A simple diagram showing the architecture of a wiki with frontend and backend components.",
+  "notes" : "Note to presenter: Be sure to explain each point clearly and provide examples when necessary. Encourage questions from the audience.",
+  "content" : [ {
+    "point" : "Frontend + Backend or just one wiki? How is the wiki organized?"
+  }, {
+    "point" : "- Frontend (web interface) and backend (data storage) separated"
+  }, {
+    "point" : "- Single wiki instance with both frontend and backend functionality"
+  }, {
+    "point" : "How is the wiki saved?"
+  }, {
+    "point" : "- Saved to a database or file system"
+  }, {
+    "point" : "- Version control system (e.g. Git, SVN) used for tracking changes"
+  }, {
+    "point" : "How is the wiki versioned?"
+  }, {
+    "point" : "- Each change saved as a new version with incremental numbering"
+  }, {
+    "point" : "- Branching and merging features allow for parallel development"
+  }, {
+    "point" : "How is the wiki deployed?"
+  }, {
+    "point" : "- Deployed to a production environment (e.g. cloud, on-prem)"
+  }, {
+    "point" : "- Can be scaled horizontally or vertically as needed"
+  }, {
+    "point" : "Collated with Calypso or not?"
+  }, {
+    "point" : "- Integrated with Calypso for additional features and functionality"
+  }, {
+    "point" : "- Stands alone without Calypso integration"
+  } ]
+}, {
+  "title" : "Before Fitnesse Runs",
+  "visual_description" : "A simple diagram showing a flowchart with two steps: Auto load Fixtures (data for tests) at the top, and Fitnesse running tests below.",
+  "notes" : "This step is crucial to ensure that Fitnesse has all the necessary data to run the tests. Without it, test failures may occur due to missing or incorrect data.",
+  "content" : [ {
+    "point" : "Auto load Fixtures (data for tests)"
+  }, {
+    "point" : "Ensure fixtures are correctly loaded and configured"
+  } ]
+}, {
+  "title" : "Fitnesse Runs",
+  "visual_description" : "An image of a fitness tracker with a green checkmark next to it, indicating successful testing.",
+  "notes" : "Presenter notes: 'This slide provides an overview of the Fitnesse test suite. Please refer to the following information for further details.'",
+  "content" : [ {
+    "point" : "Approximately how many tests are included in the Fitnesse test suite?"
+  }, {
+    "point" : "Is the Fitnesse test suite triggered manually, or via automation tools like Jenkins or GitLab?"
+  }, {
+    "point" : "What specific triggers initiate the test suite (e.g. input file/folder, scheduled tasks)?"
+  }, {
+    "point" : "Do any position/contract insertions occur via Fitnesse, or are they expected to be in the database initially?"
+  }, {
+    "point" : "How many reports are generated after running the Fitnesse test suite?"
+  }, {
+    "point" : "What purpose do these generated reports serve (e.g. testing validation, debugging)?"
+  } ]
+}, {
+  "title" : "After Fitnesse Run",
+  "visual_description" : "A screenshot of the Fitnesse report with a red light indicator for failed tests.",
+  "notes" : "Presenter notes: This slide provides an overview of post-testing tasks and report formats. Review each bullet point carefully to ensure a comprehensive understanding of the process.",
+  "content" : [ {
+    "point" : "Unload the fixtures after testing is complete to prevent resource conflicts or data corruption."
+  }, {
+    "point" : "Review generated test data: Determine whether it should be cleaned up or preserved for future reference or auditing purposes."
+  }, {
+    "point" : "Coverage report format: Specify the expected format (CSV, Excel, etc.) and ensure it aligns with team standards and requirements."
+  }, {
+    "point" : "Other reports (e.g., test results, execution logs): Identify their formats (CSV, Excel, etc.) and formats as necessary for the team's workflow and documentation needs."
+  }, {
+    "point" : "Green light/red light indicator: Determine if a color-coded system will be used to indicate test success or failure. Consider displaying a number of failed tests to facilitate quick analysis."
+  } ]
+} ]
