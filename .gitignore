@@ -1,14 +1,5 @@
 /.secrets.txt
-/pyjama-agents/.cpcache/4EF7C59F4AE9E6C32C118978D4BD02B4.basis
-/pyjama-agents/.cpcache/4EF7C59F4AE9E6C32C118978D4BD02B4.cp
-/pyjama-agents/.cpcache/4EF7C59F4AE9E6C32C118978D4BD02B4.manifest
-/pyjama-agents/.cpcache/5489866B201DC65CF1FB8E5CE8C63018.basis
-/pyjama-agents/.cpcache/5489866B201DC65CF1FB8E5CE8C63018.cp
-/pyjama-agents/.cpcache/5489866B201DC65CF1FB8E5CE8C63018.manifest
-/pyjama-agents/.cpcache/2422241722.basis
-/pyjama-agents/.cpcache/2422241722.cp
-/pyjama-agents/.cpcache/2422241722.manifest
-/pyjama-agents/pyjama-agents.iml
+/pyjama-agents/.cpcache
 /pyjama-io/pruns.csv
 /pyjama-io/pruns.xlsx
 /pyjama-io/pruns.csv
@@ -104,3 +95,4 @@
 /pyjama-philosophers/experimental/
 /pyjama-philosophers/classes/
 /pyjama-philosophers/.cpcache/
+.idea/
