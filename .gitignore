@@ -99,3 +99,4 @@
 /pyjama-philosophers/classes/
 /pyjama-philosophers/.cpcache/
 .idea/
+target/
