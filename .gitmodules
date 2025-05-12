@@ -28,3 +28,6 @@
 [submodule "philosophers"]
 	path = philosophers
 	url = git@github.com:hellonico/philosophers.git
+[submodule "skywalker"]
+	path = skywalker
+	url = git@github.com:hellonico/skywalker.git
