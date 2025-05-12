@@ -1,0 +1,210 @@
+(ns ai-agents.travel
+  (:require [clojure.core.async :as async]
+            [clj-http.client :as http]
+            [pyjama.core]
+            [clojure.data.json :as json]))
+
+;; Amadeus API Configuration
+(def amadeus-client-id "jKC0O4sAFoEHcl0ToTLLtVagcorZqG2r")       ;; Replace with your Amadeus API key
+(def amadeus-client-secret "0orfDRDbTuvUzl6g") ;; Replace with your Amadeus API secret
+(def amadeus-auth-url "https://test.api.amadeus.com/v1/security/oauth2/token")
+(def amadeus-flight-search-url "https://test.api.amadeus.com/v2/shopping/flight-offers")
+
+;; Broker definition
+(defn create-broker
+  []
+  (let [topics (atom {})]
+    {:topics topics
+     :subscribe (fn [topic subscriber-chan]
+                  (swap! topics update topic #(conj (or % #{}) subscriber-chan)))
+     :unsubscribe (fn [topic subscriber-chan]
+                    (swap! topics update topic #(disj (or % #{}) subscriber-chan)))
+     :publish (fn [topic message]
+                (doseq [subscriber (get @topics topic)]
+                  (async/put! subscriber message)))}))
+
+(defn create-trip-request-agent
+  [id broker]
+  (let [input-chan (async/chan)]
+    (async/go-loop []
+      (let [message (async/<! input-chan)]
+        (when message
+          (let [{:keys [from to date]} message
+                prompt {:pre "What are the airport code names for the main airports in %s and %s? Just answer the 3-letter names."
+                        :prompt [from to]}
+                response (pyjama.core/ollama "http://localhost:11434"
+                                             :generate
+                                             {:stream false
+                                              :model "llama3.2"
+                                              :prompt (format (:pre prompt) from to)}
+                                             :response)]
+            (if-let [codes (re-seq #"[A-Z]{3}" response)] ;; Extract airport codes from the response
+              (let [from-code (first codes)
+                    to-code (second codes)]
+                (println "Converted Cities to Airport Codes:" from "->" from-code ", " to "->" to-code)
+                ;; Forward the updated request to flight-searcher
+                ((:publish broker) :flight-request {:from from-code
+                                                    :to to-code
+                                                    :date date}))
+              (println "Failed to retrieve airport codes for" from "and" to))))
+        (recur)))
+    {:id id
+     :input-chan input-chan}))
+
+
+;; Function to get Amadeus access token
+(defn get-amadeus-access-token []
+  (let [response (http/post amadeus-auth-url
+                            {:form-params {:grant_type    "client_credentials"
+                                           :client_id     amadeus-client-id
+                                           :client_secret amadeus-client-secret}
+                             :as :json})
+        body (:body response)]
+    (if (= 200 (:status response))
+      (:access_token body)
+      (throw (Exception. (str "Failed to authenticate with Amadeus API: " (:error_description body)))))))
+
+;; Agent 1: Fetch flights using Amadeus API
+(defn create-flight-searcher-agent
+  [id broker]
+  (let [input-chan (async/chan)
+        access-token (get-amadeus-access-token)]
+    (async/go-loop []
+      (let [message (async/<! input-chan)]
+        (when message
+          (let [{:keys [from to date]} message
+                response (http/get amadeus-flight-search-url
+                                   {:headers {"Authorization" (str "Bearer " access-token)}
+                                    :query-params {:originLocationCode      from
+                                                   :destinationLocationCode to
+                                                   :departureDate           date
+                                                   :adults                  1}
+                                    :as :json})]
+            (if (= 200 (:status response))
+              (let [flight-data (:data (:body response))]
+                ;; Publish flight data to the broker for further analysis
+                ((:publish broker) :flight-data {:from from :to to :date date :flights flight-data}))
+              (println "Failed to fetch flight data:" (:body response)))))
+        (recur)))
+    {:id id
+     :input-chan input-chan}))
+
+;; Agent 2: Analyze flight options
+;(defn create-flight-analyzer-agent
+;  [id broker]
+;  (let [input-chan (async/chan)]
+;    (async/go-loop []
+;      (let [message (async/<! input-chan)]
+;        (when message
+;          (let [{:keys [from to date flights]} message]
+;            ; (prn flights)
+;            ;; Analyze flights: propose the best flight based on price
+;            (let [best-flight (apply min-key #(read-string (get-in % [:price :total])) flights)]
+;              (println (str "Best flight from " from " to " to " on " date ":"))
+;              (println best-flight)
+;              ;; Publish the analyzed result to the broker
+;              ((:publish broker) :flight-analysis {:from from :to to :date date :best-flight best-flight}))))
+;        (recur)))
+;    {:id id
+;     :input-chan input-chan}))
+(defn create-flight-analyzer-agent
+  [id broker]
+  (let [input-chan (async/chan)
+        n-flights 3] ;; Default to top 2 flights
+    (async/go-loop []
+      (let [message (async/<! input-chan)]
+        (when message
+          (let [{:keys [from to date flights]} message]
+            ;; Sort and get the top N flights by price
+            (let [top-flights (take n-flights (sort-by #(read-string (get-in % [:price :total])) flights))
+                  formatted-details (map (fn [flight]
+                                           (str "Flight: " (get-in flight [:itineraries 0 :segments 0 :carrierCode])
+                                                " | Price: $" (get-in flight [:price :total])
+                                                " | Duration: " (get-in flight [:itineraries 0 :duration])
+                                                " | Stops: " (count (get-in flight [:itineraries 0 :segments]))))
+                                         top-flights)
+                  formatted-string (str "Top Flights from " from " to " to " on " date ":\n\n"
+                                        (clojure.string/join "\n\n" formatted-details))]
+              (println "Formatted Flight Details:\n" formatted-string)
+              ;; Send formatted details to Ollama for a recommendation
+              (let [recommendation (pyjama.core/ollama "http://localhost:11434"
+                                                       :generate
+                                                       {:stream false
+                                                        :model "tinyllama"
+                                                        :prompt (str "Based on the following flight details:\n\n"
+                                                                     formatted-string
+                                                                     "\n\nWhich flight should I choose and why?")}
+                                                       :response)]
+                (println "Ollama Recommendation:\n" recommendation))
+              ;; Publish the analyzed result
+              ((:publish broker) :flight-analysis {:from from :to to :date date :top-flights top-flights}))))
+        (recur)))
+    {:id id
+     :input-chan input-chan}))
+
+
+;; Agent 3: Notify users about the best flight
+(defn create-notifier-agent
+  [id broker]
+  (let [input-chan (async/chan)]
+    (async/go-loop []
+      (let [message (async/<! input-chan)]
+        (when message
+          (let [{:keys [from to date best-flight]} message]
+            (println (str "Notification: The best flight from " from " to " to " on " date " is:"))
+            (println best-flight)))
+        (recur)))
+    {:id id
+     :input-chan input-chan}))
+
+;; Setting up the broker and agents
+;(defn setup-system []
+;  (let [broker (create-broker)
+;        flight-searcher (create-flight-searcher-agent "flight-searcher" broker)
+;        flight-analyzer (create-flight-analyzer-agent "flight-analyzer" broker)
+;        notifier (create-notifier-agent "notifier" broker)]
+;    ;; Subscribe agents to topics
+;    ((:subscribe broker) :flight-request (:input-chan flight-searcher))
+;    ((:subscribe broker) :flight-data (:input-chan flight-analyzer))
+;    ((:subscribe broker) :flight-analysis (:input-chan notifier))
+;
+;    ;; Publish a flight request
+;    ((:publish broker) :flight-request {:from "LAX"
+;                                        :to "JFK"
+;                                        :date "2025-01-30"})))
+;; Setting up the broker and agents
+;(defn setup-system []
+;  (let [broker (create-broker)
+;        flight-searcher (create-flight-searcher-agent "flight-searcher" broker)
+;        flight-analyzer (create-flight-analyzer-agent "flight-analyzer" broker)
+;        notifier (create-notifier-agent "notifier" broker)]
+;    ;; Subscribe agents to topics
+;    ((:subscribe broker) :flight-request (:input-chan flight-searcher))
+;    ((:subscribe broker) :flight-data (:input-chan flight-analyzer))
+;    ((:subscribe broker) :flight-analysis (:input-chan notifier))
+;
+;    ;; Publish a flight request
+;    ((:publish broker) :flight-request {:from "CDG" :to "JFK" :date "2025-01-30"})))
+
+(defn setup-system []
+  (let [broker (create-broker)
+        trip-request-agent (create-trip-request-agent "trip-request" broker)
+        flight-searcher (create-flight-searcher-agent "flight-searcher" broker)
+        flight-analyzer (create-flight-analyzer-agent "flight-analyzer" broker)
+        notifier (create-notifier-agent "notifier" broker)]
+    ;; Subscribe agents to topics
+    ((:subscribe broker) :trip-request (:input-chan trip-request-agent))
+    ((:subscribe broker) :flight-request (:input-chan flight-searcher))
+    ((:subscribe broker) :flight-data (:input-chan flight-analyzer))
+    ((:subscribe broker) :flight-analysis (:input-chan notifier))
+
+    ;; Publish a trip request with city names
+    ((:publish broker) :trip-request {:from "Paris" :to "Barcelona" :date "2025-02-14"})))
+
+(defn -main[& args]
+
+  ;; Run the system
+  (setup-system)
+  (Thread/sleep 30000)
+
+  )

@@ -1,0 +1,20 @@
+{
+ :aliases
+
+ {
+  :build-tools
+  {:exec-args {:app-name "Ollanterna" :mainns terminal-app.core :compile [terminal-app.core]}
+   :deps
+   {
+    build-tools/build-tools
+    {:git/url "https://github.com/hellonico/build-tools.git"
+     :sha     "1c180d133ac592bb1fc2eb7241494da5d84b314d"}}
+   }}
+ :deps
+ {com.googlecode.lanterna/lanterna {:mvn/version "3.1.2"}
+ hellonico/pyjama {
+                   ;:git/url "https://github.com/hellonico/pyjama.git"
+                   ;:git/sha "ad9e260d4ae3347625022b98521797e1dd7210d2"
+                   :local/root "../pyjama"
+                   }
+ }}

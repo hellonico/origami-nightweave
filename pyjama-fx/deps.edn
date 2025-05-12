@@ -1,0 +1,4 @@
+{:paths ["src" "samples"]
+ :deps  {
+         com.vladsch.flexmark/flexmark {:mvn/version "0.64.8"}
+         cljfx/cljfx {:mvn/version "1.9.3"}}}

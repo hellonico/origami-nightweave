@@ -1,0 +1,1 @@
+wget https://huggingface.co/mradermacher/japanese-llama-3-8b-instruct-v2-GGUF/resolve/main/japanese-llama-3-8b-instruct-v2.Q8_0.gguf
