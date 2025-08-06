@@ -6,8 +6,9 @@
            (com.googlecode.lanterna.screen TerminalScreen)
            (com.googlecode.lanterna.terminal DefaultTerminalFactory)))
 
-(defn draw-menu [screen options selected-index]
+(defn draw-menu
   "Draws the menu on the screen."
+  [screen options selected-index]
   (let [graphics (.newTextGraphics screen)]
     ; This leaves bad colors
     ; (.setForegroundColor graphics TextColor$ANSI/WHITE)
@@ -20,8 +21,7 @@
         (.putString graphics 2 (+ 2 idx) (get options idx))))
     (.refresh screen)))
 
-(defn run-app []
-  "Main loop for the terminal app."
+(defn run-app "Main loop for the terminal app." []
   (let [terminal (.createTerminal (DefaultTerminalFactory.))
         screen (TerminalScreen. terminal)
         options ["Option 1: Hello, World!"
@@ -63,6 +63,7 @@
     (.close terminal)))))
 
 
-(defn -main [& _]
+(defn -main
   "Entry point for the terminal app."
+  [& _]
   (run-app))
