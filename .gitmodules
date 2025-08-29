@@ -3,7 +3,7 @@
 	url = ./build-tools/
 [submodule "linen"]
 	path = linen
-	url = ./linen/
+	url = git@github.com:hellonico/origami-linen.git
 [submodule "origami-pink"]
 	path = origami-pink
 	url = ./origami-pink/
