@@ -47,3 +47,6 @@
 [submodule "symmetry"]
 	path = symmetry
 	url = git@github.com:hellonico/symmetry.git
+[submodule "pyjama-fx"]
+	path = pyjama-fx
+	url = git@github.com:hellonico/pyjama-fx.git
