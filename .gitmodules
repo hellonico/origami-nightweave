@@ -44,3 +44,6 @@
 [submodule "slippers"]
 	path = slippers
 	url = git@github.com:hellonico/slippers.git
+[submodule "symmetry"]
+	path = symmetry
+	url = git@github.com:hellonico/symmetry.git
