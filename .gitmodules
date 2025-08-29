@@ -15,7 +15,7 @@
 	url = ./pyjama-cljs/
 [submodule "pyjama-io"]
 	path = pyjama-io
-	url = ./pyjama-io/
+	url = git@github.com:hellonico/pyjama-io.git
 [submodule "pyjama"]
 	path = pyjama
 	url = git@github.com:hellonico/pyjama.git
