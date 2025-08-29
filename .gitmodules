@@ -9,6 +9,7 @@
 [submodule "origami-pink"]
 	path = origami-pink
 	url = git@github.com:hellonico/pink.git
+	branch = main
 [submodule "pillow"]
 	path = pillow
 	url = git@github.com:hellonico/origami-pillow.git
