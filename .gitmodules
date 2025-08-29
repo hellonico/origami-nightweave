@@ -1,9 +1,11 @@
 [submodule "build-tools"]
 	path = build-tools
 	url = git@github.com:hellonico/build-tools.git
+	branch = main
 [submodule "linen"]
 	path = linen
 	url = git@github.com:hellonico/origami-linen.git
+	branch = main
 [submodule "origami-pink"]
 	path = origami-pink
 	url = git@github.com:hellonico/pink.git
@@ -16,6 +18,7 @@
 [submodule "pyjama-io"]
 	path = pyjama-io
 	url = git@github.com:hellonico/pyjama-io.git
+	branch = main
 [submodule "pyjama"]
 	path = pyjama
 	url = git@github.com:hellonico/pyjama.git
@@ -23,6 +26,7 @@
 [submodule "waves"]
 	path = waves
 	url = git@github.com:hellonico/ocean-waves.git
+	branch = main
 [submodule "breeze"]
 	path = breeze
 	url = git@github.com:hellonico/breeze.git
