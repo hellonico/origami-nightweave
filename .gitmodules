@@ -9,7 +9,7 @@
 	url = ./origami-pink/
 [submodule "pillow"]
 	path = pillow
-	url = ./pillow/
+	url = git@github.com:hellonico/origami-pillow.git
 [submodule "pyjama-cljs"]
 	path = pyjama-cljs
 	url = git@github.com:hellonico/pyjama-cljs.git
