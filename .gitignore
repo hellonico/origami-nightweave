@@ -15,3 +15,4 @@ out
 /pyjama-slides/.clj-kondo/
 /slippers/.clj-kondo/
 /sample-lanterna/.clj-kondo/
+**/target

@@ -50,3 +50,6 @@
 [submodule "pyjama-fx"]
 	path = pyjama-fx
 	url = git@github.com:hellonico/pyjama-fx.git
+[submodule "sample-lanterna"]
+	path = sample-lanterna
+	url = git@github.com:hellonico/sample-lanterna.git
