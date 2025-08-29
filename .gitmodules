@@ -1,12 +1,12 @@
 [submodule "build-tools"]
 	path = build-tools
-	url = ./build-tools/
+	url = git@github.com:hellonico/build-tools.git
 [submodule "linen"]
 	path = linen
 	url = git@github.com:hellonico/origami-linen.git
 [submodule "origami-pink"]
 	path = origami-pink
-	url = ./origami-pink/
+	url = git@github.com:hellonico/pink.git
 [submodule "pillow"]
 	path = pillow
 	url = git@github.com:hellonico/origami-pillow.git
