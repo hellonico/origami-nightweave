@@ -1,7 +1,0 @@
-{:deps
- {hellonico/pyjama hellonico/pyjama
-  {
-   ;:git/url "https://github.com/hellonico/pyjama.git"
-   ; :git/sha "50ce0f5ba7f86c6027f106d8642613e469b906ad"
-   :local/root "../pyjama"
-   }}}

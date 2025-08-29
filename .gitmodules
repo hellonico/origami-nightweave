@@ -19,6 +19,7 @@
 [submodule "pyjama"]
 	path = pyjama
 	url = ./pyjama/
+	branch = main
 [submodule "waves"]
 	path = waves
 	url = ./waves/
@@ -31,3 +32,15 @@
 [submodule "skywalker"]
 	path = skywalker
 	url = git@github.com:hellonico/skywalker.git
+[submodule "pyjama-slides"]
+	path = pyjama-slides
+	url = git@github.com:hellonico/pyjama-slides.git
+[submodule "pyjama-agent-draft"]
+	path = pyjama-agent-draft
+	url = git@github.com:hellonico/pyjama-agent-draft.git
+[submodule "secrets"]
+	path = secrets
+	url = git@github.com:hellonico/secrets.git
+[submodule "slippers"]
+	path = slippers
+	url = git@github.com:hellonico/slippers.git
