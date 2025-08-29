@@ -18,7 +18,7 @@
 	url = ./pyjama-io/
 [submodule "pyjama"]
 	path = pyjama
-	url = ./pyjama/
+	url = git@github.com:hellonico/pyjama.git
 	branch = main
 [submodule "waves"]
 	path = waves
