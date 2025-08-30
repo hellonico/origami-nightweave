@@ -16,3 +16,4 @@ out
 /slippers/.clj-kondo/
 /sample-lanterna/.clj-kondo/
 **/target
+docs/gen
