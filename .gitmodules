@@ -58,3 +58,6 @@
 [submodule "sample-lanterna"]
 	path = sample-lanterna
 	url = git@github.com:hellonico/sample-lanterna.git
+[submodule "codebase-analyzer"]
+	path = codebase-analyzer
+	url = git@github.com:hellonico/codebase-analyzer.git
