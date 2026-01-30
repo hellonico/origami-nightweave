@@ -61,3 +61,6 @@
 [submodule "codebase-analyzer"]
 	path = codebase-analyzer
 	url = git@github.com:hellonico/codebase-analyzer.git
+[submodule "pyjama-agent-showcases"]
+	path = pyjama-agent-showcases
+	url = https://github.com/hellonico/pyjama-agent-showcases.git
